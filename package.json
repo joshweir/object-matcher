@@ -1,0 +1,62 @@
+{
+  "name": "joshs-object-matcher",
+  "version": "1.0.0",
+  "description": "A js matcher of objects",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prettier": "prettier --loglevel warn --write '**/src/**/*.ts' '**/src/**/*.tsx'",
+    "lint": "tslint -c tslint.json '**/src/**/*.{ts,tsx}' --exclude '**/node_modules/**' --exclude '**/dist/**' --project tsconfig-lint.json",
+    "test": "jest --silent",
+    "test:watch": "jest --watch",
+    "coverage": "jest --silent --coverage",
+    "build": "tsc -b --verbose"
+  },
+  "author": "Josh Weir",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/runtime": "^7.1.2",
+    "@types/jest": "^23.3.13",
+    "husky": "^1.1.0",
+    "jest": "23.6.0",
+    "maddis-code-rules": "^1.0.0",
+    "prettier": "^1.13.0",
+    "pretty-quick": "^1.6.0",
+    "ts-jest": "^23.10.5",
+    "ts-loader": "^4.4.1",
+    "ts-node": "^3.3.0",
+    "tslint": "~5.9.1",
+    "typescript": "~3.5.1"
+  },
+  "dependencies": {},
+  "jest": {
+    "globals": {
+      "DEVELOPER_FLAG": "",
+      "DEVELOPER_HOST": "",
+      "window": {},
+      "ts-jest": {
+        "isolatedModules": true
+      }
+    },
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(src|test)/.*(\\.|-|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "json",
+      "js",
+      "jsx"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged",
+      "pre-push": "npm run lint && npm run test"
+    }
+  }
+}
