@@ -11,6 +11,7 @@ export type TUndefinedMatcher = { isUndefined: true };
 export type TIsNullMatcher = { isNull: true };
 export type TIsFalsyMatcher = { isFalsy: true };
 export type TIsTruthyMatcher = { isTruthy: true };
+export type TIsEmptyMatcher = { isEmpty: true };
 
 export type TMatcherType =
   | TPrimitiveMatcher
@@ -18,7 +19,8 @@ export type TMatcherType =
   | TUndefinedMatcher
   | TIsNullMatcher
   | TIsFalsyMatcher
-  | TIsTruthyMatcher;
+  | TIsTruthyMatcher
+  | TIsEmptyMatcher;
 
 export type TMatcher = {
   key: string;
@@ -61,6 +63,7 @@ export const isUndefinedMatcher = (thing: any): thing is TUndefinedMatcher =>
 export const isNullMatcher = (thing: any): thing is TIsNullMatcher => thing.isNull && thing.isNull === true;
 export const isFalsyMatcher = (thing: any): thing is TIsFalsyMatcher => thing.isFalsy && thing.isFalsy === true;
 export const isTruthyMatcher = (thing: any): thing is TIsTruthyMatcher => thing.isTruthy && thing.isTruthy === true;
+export const isEmptyMatcher = (thing: any): thing is TIsEmptyMatcher => thing.isEmpty && thing.isEmpty === true;
 
 export const isMatcherType = (thing: any): thing is TMatcherType => {
   if (isPrimitiveMatcher(thing)) {
@@ -73,7 +76,8 @@ export const isMatcherType = (thing: any): thing is TMatcherType => {
       isUndefinedMatcher(thing) ||
       isNullMatcher(thing) ||
       isFalsyMatcher(thing) ||
-      isTruthyMatcher(thing))
+      isTruthyMatcher(thing) ||
+      isEmptyMatcher(thing))
   ) {
     return true;
   }

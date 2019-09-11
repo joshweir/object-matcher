@@ -265,6 +265,85 @@ describe('matcherMatchesObject', () => {
         });
       });
     });
+
+    describe('when isEmpty matcher is in use', () => {
+      describe('is truthy', () => {
+        test('when an array [any] matcher is in play, and at least one array item is undefined', () => {
+          const matcher: TMatcher = {
+            key: '[any]',
+            match: { isEmpty: true },
+          };
+          const thing = ['foo', undefined];
+          expect(matcherMatchesObject(matcher, thing)).toBeTruthy();
+        });
+
+        test('when an array [any] matcher is in play, and at least one array item is an empty array', () => {
+          const matcher: TMatcher = {
+            key: '[any]',
+            match: { isEmpty: true },
+          };
+          const thing = ['foo', []];
+          expect(matcherMatchesObject(matcher, thing)).toBeTruthy();
+        });
+
+        test('when an array [any] matcher is in play, and at least one array item is an empty object', () => {
+          const matcher: TMatcher = {
+            key: '[any]',
+            match: { isEmpty: true },
+          };
+          const thing = ['foo', {}];
+          expect(matcherMatchesObject(matcher, thing)).toBeTruthy();
+        });
+
+        test('when an array [all] matcher is in play, and all array items are undefined', () => {
+          const matcher: TMatcher = {
+            key: '[all]',
+            match: { isEmpty: true },
+          };
+          const thing = [undefined, undefined];
+          expect(matcherMatchesObject(matcher, thing)).toBeTruthy();
+        });
+
+        test('when an array [all] matcher is in play, and all array items are empty arrays', () => {
+          const matcher: TMatcher = {
+            key: '[all]',
+            match: { isEmpty: true },
+          };
+          const thing = [[], []];
+          expect(matcherMatchesObject(matcher, thing)).toBeTruthy();
+        });
+
+        test('when an array [all] matcher is in play, and all array items are empty objects', () => {
+          const matcher: TMatcher = {
+            key: '[all]',
+            match: { isEmpty: true },
+          };
+          const thing = [{}, {}];
+          expect(matcherMatchesObject(matcher, thing)).toBeTruthy();
+        });
+      });
+
+      describe('is falsy', () => {
+        test('when an array [any] matcher is in play, and none of the array items are falsy, empty array or empty object', () => {
+          const matcher: TMatcher = {
+            key: '[any]',
+            match: { isEmpty: true },
+          };
+          const thing = ['foo', 'faz'];
+          expect(matcherMatchesObject(matcher, thing)).toBeFalsy();
+          expect(matcherMatchesObject(matcher, [])).toBeFalsy();
+        });
+
+        test('when an array [all] matcher is in play, and not all the array items match', () => {
+          const matcher: TMatcher = {
+            key: '[all]',
+            match: { isEmpty: true },
+          };
+          const thing = ['bar', undefined, undefined];
+          expect(matcherMatchesObject(matcher, thing)).toBeFalsy();
+        });
+      });
+    });
   });
 
   describe('when thing is an array of arrays', () => {

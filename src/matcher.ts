@@ -8,6 +8,7 @@ import {
   isPrimitiveMatcher,
   isTruthyMatcher,
   isUndefinedMatcher,
+  isEmptyMatcher,
 } from './types';
 
 // to be an array matcher node it must be:
@@ -52,6 +53,22 @@ const thingMatches = (matcher: TMatcher) => (thing: any): boolean => {
     return thing === null;
   }
 
+  if (isEmptyMatcher(matcher.match)) {
+    if (!thing) {
+      return true;
+    }
+
+    if (typeof thing === 'object') {
+      if (thing instanceof Array) {
+        return !thing.length;
+      }
+
+      return Object.keys(thing).length <= 0;
+    }
+
+    return false;
+  }
+
   if (isPatternMatcher(matcher.match)) {
     // fall back to empty string because if thing is undefined or null it will always be a match!
     return buildRegExpFromPatternMatcher(matcher.match).test(thing || '');
@@ -61,7 +78,7 @@ const thingMatches = (matcher: TMatcher) => (thing: any): boolean => {
     return thing === matcher.match;
   }
 
-  throw new Error(`matcher match type unrecognised: ${matcher}`);
+  throw new Error(`matcher match type unrecognised: ${JSON.stringify(matcher, null, 2)}`);
 };
 
 const matcherNodesMatchObject = (matcherNodes: TMatcherNode[], matcher: TMatcher, obj: any): boolean => {
