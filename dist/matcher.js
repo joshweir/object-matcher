@@ -31,13 +31,25 @@ const thingMatches = (matcher) => (thing) => {
   if (types_1.isNullMatcher(matcher.match)) {
     return thing === null;
   }
+  if (types_1.isEmptyMatcher(matcher.match)) {
+    if (!thing) {
+      return true;
+    }
+    if (typeof thing === 'object') {
+      if (thing instanceof Array) {
+        return !thing.length;
+      }
+      return Object.keys(thing).length <= 0;
+    }
+    return false;
+  }
   if (types_1.isPatternMatcher(matcher.match)) {
     return exports.buildRegExpFromPatternMatcher(matcher.match).test(thing || '');
   }
   if (types_1.isPrimitiveMatcher(matcher.match)) {
     return thing === matcher.match;
   }
-  throw new Error(`matcher match type unrecognised: ${matcher}`);
+  throw new Error(`matcher match type unrecognised: ${JSON.stringify(matcher, null, 2)}`);
 };
 const matcherNodesMatchObject = (matcherNodes, matcher, obj) => {
   if (matcherNodes.length <= 0) {

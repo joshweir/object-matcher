@@ -31,6 +31,7 @@ exports.isUndefinedMatcher = (thing) => thing.isUndefined && thing.isUndefined =
 exports.isNullMatcher = (thing) => thing.isNull && thing.isNull === true;
 exports.isFalsyMatcher = (thing) => thing.isFalsy && thing.isFalsy === true;
 exports.isTruthyMatcher = (thing) => thing.isTruthy && thing.isTruthy === true;
+exports.isEmptyMatcher = (thing) => thing.isEmpty && thing.isEmpty === true;
 exports.isMatcherType = (thing) => {
   if (exports.isPrimitiveMatcher(thing)) {
     return true;
@@ -41,7 +42,8 @@ exports.isMatcherType = (thing) => {
       exports.isUndefinedMatcher(thing) ||
       exports.isNullMatcher(thing) ||
       exports.isFalsyMatcher(thing) ||
-      exports.isTruthyMatcher(thing))
+      exports.isTruthyMatcher(thing) ||
+      exports.isEmptyMatcher(thing))
   ) {
     return true;
   }

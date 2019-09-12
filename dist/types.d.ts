@@ -19,13 +19,17 @@ export declare type TIsFalsyMatcher = {
 export declare type TIsTruthyMatcher = {
   isTruthy: true;
 };
+export declare type TIsEmptyMatcher = {
+  isEmpty: true;
+};
 export declare type TMatcherType =
   | TPrimitiveMatcher
   | TPatternMatcher
   | TUndefinedMatcher
   | TIsNullMatcher
   | TIsFalsyMatcher
-  | TIsTruthyMatcher;
+  | TIsTruthyMatcher
+  | TIsEmptyMatcher;
 export declare type TMatcher = {
   key: string;
   match: TMatcherType;
@@ -37,6 +41,7 @@ export declare const isUndefinedMatcher: (thing: any) => thing is TUndefinedMatc
 export declare const isNullMatcher: (thing: any) => thing is TIsNullMatcher;
 export declare const isFalsyMatcher: (thing: any) => thing is TIsFalsyMatcher;
 export declare const isTruthyMatcher: (thing: any) => thing is TIsTruthyMatcher;
+export declare const isEmptyMatcher: (thing: any) => thing is TIsEmptyMatcher;
 export declare const isMatcherType: (thing: any) => thing is TMatcherType;
 export declare const isMatcher: (thing: any) => thing is TMatcher;
 //# sourceMappingURL=types.d.ts.map
