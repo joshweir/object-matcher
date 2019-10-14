@@ -462,6 +462,24 @@ describe('matcherMatchesObject', () => {
           expect(matcherMatchesObject(matcher, thing)).toBeTruthy();
         });
 
+        test('when key matches (key is a uri)', () => {
+          const matcher: TMatcher = {
+            key: 'some:uri:123',
+            match: 'bar',
+          };
+          const thing = { someOtherKey: 'foo', 'some:uri:123': 'bar' };
+          expect(matcherMatchesObject(matcher, thing)).toBeTruthy();
+        });
+
+        test('when nested key matches (key is a uri)', () => {
+          const matcher: TMatcher = {
+            key: 'foo:bar:baz.some:uri:123',
+            match: 'bar',
+          };
+          const thing = { someOtherKey: 'foo', 'foo:bar:baz': { 'some:uri:123': 'bar' } };
+          expect(matcherMatchesObject(matcher, thing)).toBeTruthy();
+        });
+
         test('when an array [any] matcher is in play, and some array items match', () => {
           const matcher: TMatcher = {
             key: 'someKey.[any]',
@@ -518,12 +536,30 @@ describe('matcherMatchesObject', () => {
           expect(matcherMatchesObject(matcher, thing)).toBeFalsy();
         });
 
+        test('when key does not match (with uri)', () => {
+          const matcher: TMatcher = {
+            key: 'some:uri:123',
+            match: 'bar',
+          };
+          const thing = { someOtherKey: 'bar' };
+          expect(matcherMatchesObject(matcher, thing)).toBeFalsy();
+        });
+
         test('when key values does not match', () => {
           const matcher: TMatcher = {
             key: 'someKey',
             match: 'bar',
           };
           const thing = { someKey: 'baz' };
+          expect(matcherMatchesObject(matcher, thing)).toBeFalsy();
+        });
+
+        test('when key values does not match (key is uri)', () => {
+          const matcher: TMatcher = {
+            key: 'some:uri:123',
+            match: 'bar',
+          };
+          const thing = { 'some:uri:123': 'baz' };
           expect(matcherMatchesObject(matcher, thing)).toBeFalsy();
         });
 
