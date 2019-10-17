@@ -34,14 +34,14 @@ export declare type TMatcher = {
   key: string;
   match: TMatcherType;
 };
-export declare const isMatcherNode: (thing: any) => thing is TMatcherNode;
+export declare const isMatcherNode: (thing: any, verbose?: boolean | undefined) => thing is TMatcherNode;
 export declare const isPrimitiveMatcher: (thing: any) => thing is TPrimitiveMatcher;
-export declare const isPatternMatcher: (thing: any) => thing is TPatternMatcher;
+export declare const isPatternMatcher: (thing: any, verbose?: boolean | undefined) => thing is TPatternMatcher;
 export declare const isUndefinedMatcher: (thing: any) => thing is TUndefinedMatcher;
 export declare const isNullMatcher: (thing: any) => thing is TIsNullMatcher;
 export declare const isFalsyMatcher: (thing: any) => thing is TIsFalsyMatcher;
 export declare const isTruthyMatcher: (thing: any) => thing is TIsTruthyMatcher;
 export declare const isEmptyMatcher: (thing: any) => thing is TIsEmptyMatcher;
-export declare const isMatcherType: (thing: any) => thing is TMatcherType;
-export declare const isMatcher: (thing: any) => thing is TMatcher;
+export declare const isMatcherType: (thing: any, verbose?: boolean | undefined) => thing is TMatcherType;
+export declare const isMatcher: (thing: any, verbose?: boolean | undefined) => thing is TMatcher;
 //# sourceMappingURL=types.d.ts.map

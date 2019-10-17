@@ -27,17 +27,23 @@ export type TMatcher = {
   match: TMatcherType;
 };
 
-export const isMatcherNode = (thing: any): thing is TMatcherNode => {
+export const isMatcherNode = (thing: any, verbose?: boolean): thing is TMatcherNode => {
   if (typeof thing.type !== 'string' || ['objkey', 'array'].indexOf(thing.type) === -1) {
-    throw new Error(`invalid matcher node, type should be 'objkey', 'array': ${JSON.stringify(thing)}`);
+    if (verbose) console.log(`invalid matcher node, type should be 'objkey', 'array': ${JSON.stringify(thing)}`);
+    return false;
   }
   if (typeof thing.val !== 'string' || !thing.val) {
-    throw new Error(`invalid matcher node, val should be a string that is not empty: ${JSON.stringify(thing)}`);
+    if (verbose)
+      console.log(`invalid matcher node, val should be a string that is not empty: ${JSON.stringify(thing)}`);
+    return false;
   }
   if (thing.type === 'array' && ['any', 'all'].indexOf(thing.val) === -1) {
-    throw new Error(
-      `invalid matcher node, type was identified as 'array' but val was not 'any', 'all': ${JSON.stringify(thing)}`,
-    );
+    if (verbose) {
+      console.log(
+        `invalid matcher node, type was identified as 'array' but val was not 'any', 'all': ${JSON.stringify(thing)}`,
+      );
+    }
+    return false;
   }
 
   return true;
@@ -45,7 +51,7 @@ export const isMatcherNode = (thing: any): thing is TMatcherNode => {
 
 export const isPrimitiveMatcher = (thing: any): thing is TPrimitiveMatcher =>
   ['string', 'number', 'boolean'].indexOf(typeof thing) > -1;
-export const isPatternMatcher = (thing: any): thing is TPatternMatcher => {
+export const isPatternMatcher = (thing: any, verbose?: boolean): thing is TPatternMatcher => {
   if (!thing.pattern || typeof thing.pattern !== 'string' || !thing.pattern.length) {
     return false;
   }
@@ -53,7 +59,9 @@ export const isPatternMatcher = (thing: any): thing is TPatternMatcher => {
   try {
     buildRegExpFromPatternMatcher(thing);
   } catch (e) {
-    throw new Error(`could not build RegExp from pattern matcher: ${JSON.stringify(thing)} error: ${e.toString()}`);
+    if (verbose)
+      console.log(`could not build RegExp from pattern matcher: ${JSON.stringify(thing)} error: ${e.toString()}`);
+    return false;
   }
 
   return true;
@@ -65,14 +73,14 @@ export const isFalsyMatcher = (thing: any): thing is TIsFalsyMatcher => thing.is
 export const isTruthyMatcher = (thing: any): thing is TIsTruthyMatcher => thing.isTruthy && thing.isTruthy === true;
 export const isEmptyMatcher = (thing: any): thing is TIsEmptyMatcher => thing.isEmpty && thing.isEmpty === true;
 
-export const isMatcherType = (thing: any): thing is TMatcherType => {
+export const isMatcherType = (thing: any, verbose?: boolean): thing is TMatcherType => {
   if (isPrimitiveMatcher(thing)) {
     return true;
   }
 
   if (
     typeof thing === 'object' &&
-    (isPatternMatcher(thing) ||
+    (isPatternMatcher(thing, verbose) ||
       isUndefinedMatcher(thing) ||
       isNullMatcher(thing) ||
       isFalsyMatcher(thing) ||
@@ -85,15 +93,17 @@ export const isMatcherType = (thing: any): thing is TMatcherType => {
   return false;
 };
 
-export const isMatcher = (thing: any): thing is TMatcher => {
+export const isMatcher = (thing: any, verbose?: boolean): thing is TMatcher => {
   if (!thing.key || !thing.key.length) {
-    throw new Error(`matcher invalid, key is required: ${JSON.stringify(thing)}`);
+    if (verbose) console.log(`matcher invalid, key is required: ${JSON.stringify(thing)}`);
+    return false;
   }
-  if (!isMatcherType(thing.match)) {
-    throw new Error(`matcher invalid: ${thing.match}`);
+  if (!isMatcherType(thing.match, verbose)) {
+    if (verbose) console.log(`matcher invalid: ${thing.match}`);
+    return false;
   }
   const matcherNodes = buildMatcherNodes(thing.key);
-  if (matcherNodes.filter(isMatcherNode).length === matcherNodes.length) {
+  if (matcherNodes.filter((n) => isMatcherNode(n, verbose)).length === matcherNodes.length) {
     return true;
   }
 
