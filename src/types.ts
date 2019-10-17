@@ -33,8 +33,9 @@ export const isMatcherNode = (thing: any, verbose?: boolean): thing is TMatcherN
     return false;
   }
   if (typeof thing.val !== 'string' || !thing.val) {
-    if (verbose)
+    if (verbose) {
       console.log(`invalid matcher node, val should be a string that is not empty: ${JSON.stringify(thing)}`);
+    }
     return false;
   }
   if (thing.type === 'array' && ['any', 'all'].indexOf(thing.val) === -1) {
@@ -59,8 +60,9 @@ export const isPatternMatcher = (thing: any, verbose?: boolean): thing is TPatte
   try {
     buildRegExpFromPatternMatcher(thing);
   } catch (e) {
-    if (verbose)
+    if (verbose) {
       console.log(`could not build RegExp from pattern matcher: ${JSON.stringify(thing)} error: ${e.toString()}`);
+    }
     return false;
   }
 
